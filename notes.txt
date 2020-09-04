@@ -1,0 +1,33 @@
+Chip8 Specs:
+
+RAM/Memory:
+4096 bytes of memory
+16 8-bit data registers (V0 to VF)
+1 16-bit address register 
+12 level deep stack 
+
+Input:
+16 key hexkeyboard 
+
+Graphics and sound:
+64x32 pixels 
+
+
+
+
+Design
+
+Class vs. Component 
+
+Class
+Easier?
+We can inherit class 
+Have class interface 
+
+Component
+State has to be kept track of 
+everything in hooks?
+
+Function Component
+
+    
