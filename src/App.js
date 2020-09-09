@@ -50,45 +50,86 @@ function Chippy(){
         }
         //set PC to top of stack and decrement stack pointer
         else{
-
+          changePC(stack[stack_pointer]); 
+          let new_sp = stack_pointer - 1; 
+          changeStackPointer(new_sp); 
         }
         break; 
       case 1:
         //1NNN
-        //set PC to NNN
+        let new_addr = (args[2] << 8) + (args[1] << 4) + args[0]; 
+        changePC(new_addr); 
         break; 
       case 2:
         //2NNN
         //increment stack pointer, put NNN on top of stack, set PC = NNN
+        let new_addr = (args[2] << 8) + (args[1] << 4) + args[0];
+        let new_sp = stack_pointer + 1; 
+        let new_stack = stack.slice(); 
+        new_stack[new_sp] = new_addr; 
+        changePC(new_addr); 
+        changeStackPointer(new_sp); 
+        changeStack(new_stack); 
         break;
       case 3:
         //3XKK
+        let reg_val = data_registers[args[2]]; 
+        let comp_val = (args[1] << 4) + args[0]; 
+        if(reg_val == comp_val){
+          changePC(pc + 2);   
+        }
         break; 
       case 4:
         //4XKK
+        let reg_val = data_registers[args[2]]; 
+        let comp_val = (args[1] << 4) + args[0]; 
+        if(reg_val != comp_val){
+          changePC(pc + 2);   
+        }
         break; 
       case 5:
         //5XY0
+        let reg_one = data_registers[args[2]]; 
+        let reg_two = data_registers[args[1]]; 
+        if(reg_one == reg_two){
+          changePC(pc + 2); 
+        }
         break; 
       case 6:
         //6XKK
+        let new_reg = data_registers.slice();
+        let new_val = (args[1] << 4) + args[0];
+        new_reg[args[2]] = new_val;
+        changeDataReg(new_reg); 
         break; 
       case 7:
         //7XKK
+        let new_reg = data_registers.slice();
+        let new_val = (args[1] << 4) + args[0];
+        new_reg[args[2]] += new_val;
+        changeDataReg(new_reg); 
         break; 
       case 8:
         //8XYN
         if(args[0] === 0){
-
+          let new_reg = data_registers.slice(); 
+          new_reg[args[2]] = new_reg[args[1]]; 
+          changeDataReg(new_reg); 
         }
         else if(args[0] === 1){
-
+          let new_reg = data_registers.slice(); 
+          new_reg[args[2]] = new_reg[args[1]] | new_reg[args[2]]; 
+          changeDataReg(new_reg); 
         }
         else if(args[0] === 2){
-
+          let new_reg = data_registers.slice(); 
+          new_reg[args[2]] = new_reg[args[1]] & new_reg[args[2]]; 
+          changeDataReg(new_reg);
         }
         else if(args[0] === 3){
-          
+          let new_reg = data_registers.slice(); 
+          new_reg[args[2]] = new_reg[args[1]] ^ new_reg[args[2]]; 
+          changeDataReg(new_reg);
         }
         else if(args[0] === 4){
           
