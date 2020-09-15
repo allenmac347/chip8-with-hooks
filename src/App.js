@@ -111,44 +111,44 @@ function Chippy(){
         break; 
       case 8:
         //8XYN
-        if(args[0] === 0){
-          let new_reg = data_registers.slice(); 
+        let new_reg = data_registers.slice(); 
+        if(args[0] === 0){ 
           new_reg[args[2]] = new_reg[args[1]]; 
-          changeDataReg(new_reg); 
         }
         else if(args[0] === 1){
-          let new_reg = data_registers.slice(); 
           new_reg[args[2]] = new_reg[args[1]] | new_reg[args[2]]; 
-          changeDataReg(new_reg); 
         }
         else if(args[0] === 2){
-          let new_reg = data_registers.slice(); 
           new_reg[args[2]] = new_reg[args[1]] & new_reg[args[2]]; 
-          changeDataReg(new_reg);
         }
-        else if(args[0] === 3){
-          let new_reg = data_registers.slice(); 
+        else if(args[0] === 3){           
           new_reg[args[2]] = new_reg[args[1]] ^ new_reg[args[2]]; 
-          changeDataReg(new_reg);
         }
-        else if(args[0] === 4){
-          
+        else if(args[0] === 4){          
+          let result = (new_reg[args[2]] + new_reg[args[1]]) % 256; 
+          new_reg[args[0xF]] = (new_reg[args[2]] > 0b11111111 - new_reg[args[1]]) ? 1 : 0;  
+          new_reg[args[2]] = result; 
         }
-        else if(args[0] === 5){
-          
+        else if(args[0] === 5){          
+          new_reg[0xF] = (new_reg[args[2]] > new_reg[args[1]]) ? 1 : 0; 
+          new_reg[args[2]] = (new_reg[args[2]] - new_reg[args[1]]) % 256; 
         }
-        else if(args[0] === 6){
-          
+        else if(args[0] === 6){           
+          new_reg[0xF] = (new_reg[args[2]] & 0b1 === 1) ? 1 : 0; 
+          new_reg[args[2]] /= 2; 
         }
-        else if(args[0] === 7){
-          
+        else if(args[0] === 7){          
+          new_reg[0xF] = (new_reg[args[1]] > new_reg[args[2]]) ? 1 : 0; 
+          new_reg[args[2]] = new_reg[args[1]] - new_reg[args[2]]; 
         }
         else if(args[0] === 0xE){
-
+           new_reg[0xF] = ((new_reg[args[2]] >> 7) === 1) ? 1 : 0;
+           new_reg[args[2]] *= 2; 
         }
         else{
           console.log("error in opcode 8"); 
         }
+        changeDataReg(new_reg); 
         break;
       case 9:
         //9XY0
