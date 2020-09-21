@@ -152,12 +152,19 @@ function Chippy(){
         break;
       case 9:
         //9XY0
+        if(data_registers[args[2]] != data_registers[args[1]]){
+          changePC(pc + 2); 
+        }
         break; 
       case 10:
         //ANNN
+        let result = args[2] << 8 + args[1] << 4 + args[0]; 
+        changeAddrReg(result); 
         break; 
       case 11:
         //BNNN
+        let result = args[2] << 8 + args[1] << 4 + args[0];
+        changePC(result + data_registers[0]); 
         break; 
       case 12:
         //CXKK
